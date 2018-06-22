@@ -1,0 +1,5 @@
+npt ## simulation ensemble
+50000 10000 2 0 ## number of steps (total), equilibration steps, size of average block, every steps write cfg
+0.3 0.3 0.3 0.3 isotr ## maximum trial displacements
+4000.0 166.054 ## run temperature
+0.0001 ## grid for energy/density histogram

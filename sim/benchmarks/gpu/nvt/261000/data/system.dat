@@ -1,0 +1,11 @@
+lattice ## initial configuration
+2 0.053679 ## number of species (sp), density (npart/A^3)
+O 174000 ## name of sp1, number of particles of sp1
+Si 87000 ## name of spN, number of particles of spN
+eV ## energy units
+mors ## interaction (mors/lf)
+0.023272  1.3731  3.791  9.0 ## (sp1-sp1) a, b, c, rc (Morse parameters + cutoff)
+mors
+1.99597   2.6518  1.628  9.0 ## (sp1-spN) a, b, c, rc (Morse parameters + cutoff)
+mors
+0.007695  2.0446  3.7598 9.0 ## (spN-spN) a, b, c, rc (Morse parameters + cutoff)
