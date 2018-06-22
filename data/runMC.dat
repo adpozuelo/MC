@@ -1,0 +1,6 @@
+nvt ## simulation ensemble
+100 10 2 0 ## number of steps (total), equilibration steps, size of average block, steps write cfg
+10 10000 ## chemical potential steps, chemical potential average iterations
+0.05 0.05 0.05 0.00 isotr ## maximum trial displacements
+4000.0 166.054 ## run temperature
+0.1 ## grid for energy/density histogram
