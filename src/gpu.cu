@@ -281,8 +281,9 @@ __global__ void eKernel(float *r, float *eng, int natoms, int nsp, int *itp, flo
 					}
 				}
 			}
-			__syncthreads(); // sync block threads
 		}
+		__syncthreads(); // sync block threads
+
 		if (i < natoms) { // if particle (thread) is valid
 			eng[i] = energ; // set total energy to output vector
 		}
