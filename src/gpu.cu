@@ -51,15 +51,14 @@ __device__ float __dist2__(float *r, float *runit) {
 
 // GPU (device code) energy between two particles (see potEnergy.cpp for CPU code).
 __device__ float __fpot__(float r2, int nit, int *keyp, float *al, float *bl, float *cl, float *bl2) {
-	float r;
+	float r, r6;
 	if (keyp[nit] == 1) {
 		float rr = __fsqrt_rn(r2);
 		float expp = __expf(-bl[nit] * (rr - cl[nit]));
 		r = al[nit] * ((1 - expp) * (1 - expp) - 1.0);
 	} else if (keyp[nit] == 2) {
-		float dist2 = __fdividef(bl2[nit] * bl2[nit], r2);
-		float di6 = dist2 * dist2 * dist2;
-		r = 4 * al[nit] * di6 * (di6 - 1.0);
+		r6 = (bl2[nit] / r2) * (bl2[nit] / r2) * (bl2[nit] / r2);
+		r = 4 * al[nit] * r6 * (r6 - 1.0);
 	} else {
 		asm("trap;");
 	}
