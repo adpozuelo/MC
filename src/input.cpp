@@ -160,8 +160,6 @@ void readSystemDatFile(char **initcf, int *nsp, int *nitmax, char ***atoms, int 
 					fputs(errorIF, stderr);
 					exit(1);
 				}
-
-				(*bl2)[nit] = bb[i][j] * bb[i][j]; // linearize and power 2 potential interactions parameters
 			} else {
 				printf("ERROR: Input failed: %s not implemented yet!", buffer);
 				exit(1);
@@ -197,9 +195,10 @@ void readSystemDatFile(char **initcf, int *nsp, int *nitmax, char ***atoms, int 
 			(*bl)[i] *= *sigma_o;
 		}
 	} else if ((*keyp)[0] == 2) {
-		*sigma_o = (*bl2)[0];
+		*sigma_o = (*bl)[0];
 		for (int i = 0; i < *nitmax; ++i) {
-			(*bl2)[i] /= *sigma_o;
+			(*bl)[i] /= *sigma_o;
+			(*bl2)[i] = (*bl)[i] * (*bl)[i]; // power 2 potential interactions parameter
 		}
 	} else {
 		fputs("ERROR: interaction not implemented!\n", stderr);
