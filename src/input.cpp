@@ -474,7 +474,6 @@ void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc, d
 			fputs(errorInvalidFormatRunFile, stderr);
 			exit(1);
 		}
-		*deltaeng /= eps_o; // normalize in reference to potential parameters
 
 		// create energy histogram
 		*ehisto = (unsigned long long int *) calloc(NDE * 2 + 1, sizeof(unsigned long long int));
