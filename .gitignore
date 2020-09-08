@@ -47,5 +47,4 @@ mc.code-workspace
 *.xyz
 
 # Simulation and result directories
-sim/
 results/
