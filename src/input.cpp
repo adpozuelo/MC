@@ -160,8 +160,6 @@ void readSystemDatFile(char **initcf, int *nsp, int *nitmax, char ***atoms, int 
 					fputs(errorIF, stderr);
 					exit(1);
 				}
-
-				(*bl2)[nit] = bb[i][j] * bb[i][j]; // linearize and power 2 potential interactions parameters
 			} else {
 				printf("ERROR: Input failed: %s not implemented yet!", buffer);
 				exit(1);
@@ -197,9 +195,10 @@ void readSystemDatFile(char **initcf, int *nsp, int *nitmax, char ***atoms, int 
 			(*bl)[i] *= *sigma_o;
 		}
 	} else if ((*keyp)[0] == 2) {
-		*sigma_o = (*bl2)[0];
+		*sigma_o = (*bl)[0];
 		for (int i = 0; i < *nitmax; ++i) {
-			(*bl2)[i] /= *sigma_o;
+			(*bl)[i] /= *sigma_o;
+			(*bl2)[i] = (*bl)[i] * (*bl)[i]; // power 2 potential interactions parameter
 		}
 	} else {
 		fputs("ERROR: interaction not implemented!\n", stderr);
@@ -407,7 +406,7 @@ void readConfigFile(double **a, double **b, double **c, const int nsp, const int
 }
 
 // Read runMC.dat input file
-void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc, double **rdmax, double *temp, double *deltaeng, unsigned long long int **ehisto, double *vdmax, char **scaling, double *pres, double *deltar, double **sideav, unsigned long long int **rhisto, const double eps_o, const double sigma_o, int *chpotnb, int *chpotit) {
+void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc, double **rdmax, double *temp, double *deltaeng, unsigned long long int **ehisto, double *vdmax, char **scaling, double *pres, double *deltar, double **sideav, unsigned long long int **rhisto, const double eps_o, const double sigma_o, int *chpotnb, int *chpotit, double *final_sm_rate) {
 	char line[MAX_LINE_SIZE] = "";
 	char buffer[MAX_LINE_SIZE] = "";
 	const char *filename = "../data/runMC.dat"; // input filename
@@ -459,7 +458,7 @@ void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc, d
 
 	if (strcmp(*ensemble, "nvt") == 0) { // if ensemble is nvt
 		readLine(runFile, filename, line);
-		if (sscanf(line, "%lf %lf %lf", &(*rdmax)[0], &(*rdmax)[1], &(*rdmax)[2]) < 3) { // read maximum trial displacements
+		if (sscanf(line, "%lf %lf %lf %lf", final_sm_rate, &(*rdmax)[0], &(*rdmax)[1], &(*rdmax)[2]) < 4) { // read maximum trial displacements
 			fputs(errorInvalidFormatRunFile, stderr);
 			exit(1);
 		}
@@ -475,7 +474,6 @@ void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc, d
 			fputs(errorInvalidFormatRunFile, stderr);
 			exit(1);
 		}
-		*deltaeng /= eps_o; // normalize in reference to potential parameters
 
 		// create energy histogram
 		*ehisto = (unsigned long long int *) calloc(NDE * 2 + 1, sizeof(unsigned long long int));
@@ -488,7 +486,7 @@ void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc, d
 	if (strcmp(*ensemble, "npt") == 0) { // if ensemble is ntp
 		readLine(runFile, filename, line);
 		// read maximum trial displacements, volume maximum displacement and simulation scaling (ortho or isotr)
-		if (sscanf(line, "%lf %lf %lf %lf %s", &(*rdmax)[0], &(*rdmax)[1], &(*rdmax)[2], vdmax, buffer) < 5) {
+		if (sscanf(line, "%lf %lf %lf %lf %lf %s", final_sm_rate, &(*rdmax)[0], &(*rdmax)[1], &(*rdmax)[2], vdmax, buffer) < 6) {
 			fputs(errorInvalidFormatRunFile, stderr);
 			exit(1);
 		}

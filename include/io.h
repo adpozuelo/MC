@@ -109,7 +109,7 @@ void readConfigFile(double **a, double **b, double **c, const int nsp, const int
    chpotnb: every steps chemical potential will be executed
    chpotit: chemical potential iterations (number of particles inserted for every specie)
  */
-void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc, double **rdmax, double *temp, double *deltaeng, unsigned long long int **ehisto, double *vdmax, char **scaling, double *pres, double *deltar, double **sideav, unsigned long long int **rhisto, const double eps_o, const double sigma_o, int *chpotnb, int *chpotit);
+void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc, double **rdmax, double *temp, double *deltaeng, unsigned long long int **ehisto, double *vdmax, char **scaling, double *pres, double *deltar, double **sideav, unsigned long long int **rhisto, const double eps_o, const double sigma_o, int *chpotnb, int *chpotit, double *final_sm_rate);
 
 /**
    Initialize output files
@@ -144,7 +144,7 @@ void initOutputFiles(const char *ensemble, const int nsp, char **atoms);
    eref: reference energy
 
  */
-void printout(const bool inst, double *etotal, double *eref, const double esr, const char *ensemble, double *sideav, const double etav, const int naver, const double v0, const double esav, const double volav, double *side, const int natoms, const int ntrial, const int naccept, const int nvaccept, const double sigma_o, const double eps_o);
+void printout(const bool inst, double *etotal, double *eref, const double esr, const char *ensemble, double *sideav, const double etav, const int naver, const double v0, const double esav, const double volav, double *side, const int natoms, const int ntrial, const int naccept, const int nvaccept, const double sigma_o, const double eps_o, const double final_sm_rate, double *vdmax, double *rdmax);
 
 /**
    Write configuration to conf.xyz output file

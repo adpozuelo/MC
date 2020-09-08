@@ -1,0 +1,12 @@
+dlp ## initial configuration
+2 ## number of species (sp)
+O 3072 ## name of sp1, number of particles of sp1
+Si 1536 ## name of spN, number of particles of spN
+eV ## energy units
+mors
+0.023272  1.3731  3.791  9.0  !! O-O  a b c rc (Morse parameters + cutoff)
+mors
+1.99597   2.6518  1.628  9.0  !! O-Si
+mors
+0.007695  2.0446  3.7598 9.0  !! Si-Si
+

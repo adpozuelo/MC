@@ -58,6 +58,6 @@ void histograms(const char *ensemble, double *etotal, unsigned long long int *eh
    etav: accumulated total energy average
    esav: accumulated iteration energy average
 */
-void averages(bool *first, const char *ensemble, unsigned long long int *ehisto, const double deltaeng, double *eref, double *volav, const double v0, const double esr, double *sideav, double *side, unsigned long long int *rhisto, const double deltar, int *naver, double *etotal, double *etav, double *esav, const int natoms, const int ntrial, const int naccept, const int nvaccept, const double sigma_o, const double eps_o);
+void averages(bool *first, const char *ensemble, unsigned long long int *ehisto, const double deltaeng, double *eref, double *volav, const double v0, const double esr, double *sideav, double *side, unsigned long long int *rhisto, const double deltar, int *naver, double *etotal, double *etav, double *esav, const int natoms, const int ntrial, const int naccept, const int nvaccept, const double sigma_o, const double eps_o, const double final_sm_rate, double *vdmax, double *rdmax);
 
 #endif

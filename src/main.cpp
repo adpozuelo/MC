@@ -139,8 +139,9 @@ int main(int argc, char *argv[]) {
 	   rho: simulation box density
 	   sigma_o: potential sigma normalization value
 	   eps_o: potental epsilon normalization value
+	   final_sm_rate: final success movements rate
 	 */
-	double v0, temp, deltaeng, vdmax, pres, deltar, etotal, etav, esav,	kt, rcut, rcut2, esr, eref, volav, rho, sigma_o, eps_o;
+	double v0, temp, deltaeng, vdmax, pres, deltar, etotal, etav, esav, kt, rcut, rcut2, esr, eref, volav, rho, sigma_o, eps_o, final_sm_rate;
 	etotal = etav = esav = eref = 0.0; // Accumulators initialized to zero
 	/**
 	   cl: Morse/LJ parameters
@@ -189,7 +190,7 @@ int main(int argc, char *argv[]) {
 	free(initcf);
 
 	// Read runMC.dat input file
-	readRunMCFile(&ensemble, &nstep, &nequil, &nb, &wc, &rdmax, &temp, &deltaeng, &ehisto, &vdmax, &scaling, &pres, &deltar, &sideav, &rhisto, eps_o, sigma_o, &chpotnb, &chpotit);
+	readRunMCFile(&ensemble, &nstep, &nequil, &nb, &wc, &rdmax, &temp, &deltaeng, &ehisto, &vdmax, &scaling, &pres, &deltar, &sideav, &rhisto, eps_o, sigma_o, &chpotnb, &chpotit, &final_sm_rate);
 
 	// Initialize output files
 	initOutputFiles(ensemble, nsp, atoms);
@@ -291,10 +292,10 @@ int main(int argc, char *argv[]) {
 		if (istep % nb == 0) { // If statistics must be calculated
 			if (istep > nequil) { // If equilibrium phase is over
 				// Write statistics in output files
-				averages(&firstRun, ensemble, ehisto, deltaeng, &eref, &volav, v0, esr, sideav, side, rhisto, deltar, &naver, &etotal, &etav, &esav, natoms, ntrial, naccept, nvaccept, sigma_o, eps_o);
+				averages(&firstRun, ensemble, ehisto, deltaeng, &eref, &volav, v0, esr, sideav, side, rhisto, deltar, &naver, &etotal, &etav, &esav, natoms, ntrial, naccept, nvaccept, sigma_o, eps_o, final_sm_rate, &vdmax, rdmax);
 			} else {
 				// Print results and not write them to output files
-				printout(false, &etotal, &eref, esr, ensemble, sideav, etav, naver, v0, esav, volav, side, natoms, ntrial, naccept, nvaccept, sigma_o, eps_o);
+				printout(false, &etotal, &eref, esr, ensemble, sideav, etav, naver, v0, esav, volav, side, natoms, ntrial, naccept, nvaccept, sigma_o, eps_o, final_sm_rate, &vdmax, rdmax);
 			}
 		}
 

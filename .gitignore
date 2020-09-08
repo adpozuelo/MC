@@ -1,6 +1,7 @@
 # Project files
 .project
 .cproject
+mc.code-workspace
 
 # Compiled Object files
 *.slo
@@ -44,3 +45,7 @@
 
 # XYZ files
 *.xyz
+
+# Simulation and result directories
+sim/
+results/

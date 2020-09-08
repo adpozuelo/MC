@@ -15,12 +15,14 @@
 #include "../include/io.h"
 
 // Print average and/or instant results and write them to output files
-void printout(const bool inst, double *etotal, double *eref, const double esr, const char *ensemble, double *sideav, const double etav, const int naver, const double v0, const double esav, const double volav, double *side, const int natoms, const int ntrial, const int naccept, const int nvaccept, const double sigma_o, const double eps_o) {
+void printout(const bool inst, double *etotal, double *eref, const double esr, const char *ensemble, double *sideav, const double etav, const int naver, const double v0, const double esav, const double volav, double *side, const int natoms, const int ntrial, const int naccept, const int nvaccept, const double sigma_o, const double eps_o, const double final_sm_rate, double *vdmax, double *rdmax) {
 	static double etavq = 0.0; // total energy average
 	static int npeq = 0; // number of printouts
 	int ncycles = ntrial / natoms; // number of cycles
-	double nacceptper = 100 * (naccept / (double) ntrial); // % of accepted atom's movements
-	double nvacceptper = 100 * (nvaccept / (double) ncycles); // % of accepted volume's movements
+	double n_accept_trial = naccept / (double) ntrial;
+	double nv_accept_ncycles = nvaccept / (double) ncycles;
+	double nacceptper = 100 * n_accept_trial; // % of accepted atom's movements
+	double nvacceptper = 100 * nv_accept_ncycles; // % of accepted volume's movements
 	*etotal = esr;
 
 	if (inst) { // write average information to a output file boolean control
@@ -58,6 +60,13 @@ void printout(const bool inst, double *etotal, double *eref, const double esr, c
 		fclose(ioth); // close output file
 
 	} else {
+	  for (int i = 0; i < NDIM; ++i) {
+	    rdmax[i] *= (n_accept_trial / final_sm_rate);
+	  }
+	  if (strcmp(ensemble, "npt") == 0) {
+	    *vdmax *= (nv_accept_ncycles / final_sm_rate);
+	  }
+	  
 		npeq++; // update printout counter
 		etavq += *etotal; // update total energy average
 		*eref = etavq / npeq; // set eref energy 

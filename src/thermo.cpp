@@ -24,7 +24,6 @@ void histograms(const char *ensemble, double *etotal, unsigned long long int *eh
 	if (strcmp(ensemble, "nvt") == 0) { // if ensemble is nvt
 		*etotal = esr;
 		int nei = rint((*etotal - eref) / deltaeng) + NDE; // get histogram's bind for the energy
-
 		if (nei < 0 || nei > 2 * NDE) { // check integrity bounds for the energy's bind
 			printf("Warning: E histogram out of bounds, increase NDE up to %d!\n", abs(nei - NDE));
 			exit(1);
@@ -46,7 +45,7 @@ void histograms(const char *ensemble, double *etotal, unsigned long long int *eh
 }
 
 // Write statistics to output files
-void averages(bool *first, const char *ensemble, unsigned long long int *ehisto, const double deltaeng, double *eref, double *volav, const double v0, const double esr, double *sideav, double *side, unsigned long long int *rhisto, const double deltar, int *naver, double *etotal, double *etav, double *esav, const int natoms, const int ntrial, const int naccept, const int nvaccept, const double sigma_o, const double eps_o) {
+void averages(bool *first, const char *ensemble, unsigned long long int *ehisto, const double deltaeng, double *eref, double *volav, const double v0, const double esr, double *sideav, double *side, unsigned long long int *rhisto, const double deltar, int *naver, double *etotal, double *etav, double *esav, const int natoms, const int ntrial, const int naccept, const int nvaccept, const double sigma_o, const double eps_o, const double final_sm_rate, double *vdmax, double *rdmax) {
 	
 	if (*first) { // if equilibrium phase is over
 
@@ -132,5 +131,5 @@ void averages(bool *first, const char *ensemble, unsigned long long int *ehisto,
 	*esav += esr; // update accumulated iteration energy average
 
 	// print statistics
-	printout(true, etotal, eref, esr, ensemble, sideav, *etav, *naver, v0, *esav, *volav, side, natoms, ntrial, naccept, nvaccept, sigma_o, eps_o);
+	printout(true, etotal, eref, esr, ensemble, sideav, *etav, *naver, v0, *esav, *volav, side, natoms, ntrial, naccept, nvaccept, sigma_o, eps_o, final_sm_rate, vdmax, rdmax);
 }
