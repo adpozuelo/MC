@@ -46,5 +46,11 @@ mc.code-workspace
 # XYZ files
 *.xyz
 
-# Simulation and result directories
-results/
+# Result files
+chpotential.dat
+thermoaver.dat
+thermoins.dat
+
+# Simulation directories
+sim/
+simulations/
