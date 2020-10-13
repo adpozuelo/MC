@@ -1,12 +1,13 @@
 /*
  * TFM (URV/UOC): Computational Engineering and Mathematics.
- * Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic simulations.
+ * Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic
+ * simulations.
  *
  * GPU functions header file.
  *
- * Author: adpozuelo@uoc.edu
- * Version: 1.0.
- * Date: 2018
+ * Author: adpozuelo@gmail.com
+ * Version: 2.0
+ * Date: 2020
  */
 
 #ifndef GPU_H
@@ -40,27 +41,33 @@
    a: X side length of the simulation box
    b: Y side length of the simulation box
    c: Z side length of the simulation box
-   stream: uniform random number generator stream for MC simulation (chemical potential excluded)
-   vdmax: volume maximum displacement
-   scaling: simulation scaling (ortho or isotr)
-   pres: simulation box pression
-   kt: Boltzmann constant
+   stream: uniform random number generator stream for MC simulation (chemical
+   potential excluded) vdmax: volume maximum displacement scaling: simulation
+   scaling (ortho or isotr) pres: simulation box pression kt: Boltzmann constant
    rdmax: maximum trial displacements
-   chpotit: chemical potential iterations (number of particles inserted for every specie)
-   cudadevice: cuda device in which run the algorithm.
+   chpotit: chemical potential iterations (number of particles inserted for
+   every specie) cudadevice: cuda device in which run the algorithm.
    @return:
    mode 1:
       the energy of a configuration
    mode 2:
-      ntrial: number of trials executed
       esr: current iteration/step energy
       naccept: number of success movements of particles in move atoms algorithm
    mode 4:
       esr: current iteration/step energy
       v0: simulation box volume
-      nvaccept: number of success movements of particles in move volume algorithm
+      nvaccept: number of success movements of particles in move volume
+   algorithm
 */
 
-extern "C" void gpu(const int mode, const int natoms, int **itp, double *r, double *runit, double *rc2, const int nsp, int *nspps, int *keyp, double *al, double *bl, double *cl, double *bl2, const int nitmax, const int cudadevice, int *ntrial, VSLStreamStatePtr *stream, double *rdmax, const double kt, double *esr, int *naccept, const int chpotit, double *v0, double *side, double *a, double *b, double *c, const double vdmax, const char *scaling, const double pres, int *nvaccept);
+extern "C" void gpu(const int mode, const int natoms, int **itp, double *r,
+                    double *runit, double *rc2, const int nsp, int *nspps,
+                    int *keyp, double *al, double *bl, double *cl, double *bl2,
+                    const int nitmax, const int cudadevice,
+                    VSLStreamStatePtr *stream, double *rdmax, const double kt,
+                    double *esr, unsigned long int *naccept, const int chpotit,
+                    double *v0, double *side, double *a, double *b, double *c,
+                    const double vdmax, const char *scaling, const double pres,
+                    unsigned long int *nvaccept);
 
 #endif

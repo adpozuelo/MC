@@ -3,4 +3,4 @@ nvt ## simulation ensemble
 0 1000 ## chemical potential steps, chemical potential average iterations
 0.5 0.05 0.05 0.05 0.00 isotr ## % of acceptance, maximum trial displacements (x, y, z), scaling
 1.0 166.054 ## temperature, pressure
-0.1 ## grid for energy/density histogram (grid/energy_unit)
+10.0 ## grid for energy/density histogram (grid/energy_unit)
