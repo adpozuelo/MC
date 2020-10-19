@@ -1,13 +1,12 @@
 /*
  * TFM (URV/UOC): Computational Engineering and Mathematics.
- * Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic
- * simulations.
+ * Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic simulations.
  *
  * Utility functions header file.
  *
- * Author: adpozuelo@gmail.com
- * Version: 2.0
- * Date: 2020
+ * Author: adpozuelo@uoc.edu
+ * Version: 1.0.
+ * Date: 2018
  */
 
 #ifndef UTIL_H_
@@ -44,8 +43,8 @@ int getIatype(const int nsp, int *nspps, const int sp);
    natoms: total number of atoms/particles
    nspps: accumulated number of species per specie
    atoms: specie's chemical character representation
-   stream: uniform random number generator stream for MC simulation (chemical
-   potential excluded) sigma_o: potential sigma normalization value
+   stream: uniform random number generator stream for MC simulation (chemical potential excluded)
+   sigma_o: potential sigma normalization value
    @return:
    a: X side length of the simulation box
    b: Y side length of the simulation box
@@ -56,9 +55,6 @@ int getIatype(const int nsp, int *nspps, const int sp);
    runit: normalization units of the simulation box's length sides
    v0: simulation box volume
  */
-void initLattice(const double rho, double **a, double **b, double **c,
-                 const int nsp, const int natoms, int **ntype, double **r,
-                 int *nspps, char **atoms, double **side, double **runit,
-                 double *v0, VSLStreamStatePtr *stream, const double sigma_o);
+void initLattice(const double rho, double **a, double **b, double **c, const int nsp, const int natoms, int **ntype, double **r, int *nspps, char **atoms, double **side, double **runit, double *v0, VSLStreamStatePtr *stream, const double sigma_o);
 
 #endif /* UTIL_H_ */
