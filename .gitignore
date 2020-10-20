@@ -32,6 +32,12 @@ mc.code-workspace
 *.out
 *.app
 
+# Python files
+*.py
+
+# Bash files
+*.sh
+
 # Image files
 *.png
 *.jpg
