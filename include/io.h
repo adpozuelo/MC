@@ -1,6 +1,7 @@
 /*
  * TFM (URV/UOC): Computational Engineering and Mathematics.
- * Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic simulations.
+ * Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic
+ * simulations.
  *
  * Input/Output header file.
  *
@@ -12,24 +13,26 @@
 #ifndef IO_H
 #define IO_H
 
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 
-#define MAX_LINE_SIZE 256 // Maximum size (in chars) of a line
-#define errorNEM "ERROR: Can't allocate memory!\n" // Error not enough memory
-#define NDE 50000 // Energy histogram's bound
-#define NRMAX 10000 // Density histogram's bound
-#define NDIM 3 // Number of dimensions (XYZ)
-#define NTHREAD 128 // Number of CUDA threads per block
+#define MAX_LINE_SIZE 256  // Maximum size (in chars) of a line
+#define errorNEM "ERROR: Can't allocate memory!\n"  // Error not enough memory
+#define NDE 50000                                   // Energy histogram's bound
+#define NRMAX 10000                                 // Density histogram's bound
+#define NDIM 3       // Number of dimensions (XYZ)
+#define NTHREAD 128  // Number of CUDA threads per block
 
 // CUDA kernel's check error macro
-#define cudaCheckError() { \
-		cudaError_t e=cudaGetLastError(); \
-		if(e!=cudaSuccess) { \
-			printf("\nCuda failure %s:%d: '%s'\n",__FILE__,__LINE__,cudaGetErrorString(e));	\
-			exit(0); \
-		} \
-	}
+#define cudaCheckError()                                         \
+  {                                                              \
+    cudaError_t e = cudaGetLastError();                          \
+    if (e != cudaSuccess) {                                      \
+      printf("\nCuda failure %s:%d: '%s'\n", __FILE__, __LINE__, \
+             cudaGetErrorString(e));                             \
+      exit(0);                                                   \
+    }                                                            \
+  }
 
 /**
    Read a line from a file.
@@ -63,7 +66,11 @@ void readLine(FILE *file, const char *filename, char *line);
    sigma_o: potential sigma normalization value
    eps_o: potental epsilon normalization value
  */
-void readSystemDatFile(char **initcf, int *nsp, int *nitmax, char ***atoms, int **nspps, int *natoms, char **units, int **keyp, double **cl, double **bl2, double **al, double **bl, double **rc2, double ***rc, int ***itp, double *rho, double *sigma_o, double *eps_o);
+void readSystemDatFile(char **initcf, int *nsp, int *nitmax, char ***atoms,
+                       int **nspps, int *natoms, char **units, int **keyp,
+                       double **cl, double **bl2, double **al, double **bl,
+                       double **rc2, double ***rc, int ***itp, double *rho,
+                       double *sigma_o, double *eps_o);
 
 /**
    Read CONFIG input file.
@@ -83,7 +90,10 @@ void readSystemDatFile(char **initcf, int *nsp, int *nitmax, char ***atoms, int 
    runit: normalization units of the simulation box's length sides
    v0: simulation box volume
  */
-void readConfigFile(double **a, double **b, double **c, const int nsp, const int natoms, int **ntype, double **r, int *nspps, char **atoms, double **side, double **runit, double *v0, const double sigma_o);
+void readConfigFile(double **a, double **b, double **c, const int nsp,
+                    const int natoms, int **ntype, double **r, int *nspps,
+                    char **atoms, double **side, double **runit, double *v0,
+                    const double sigma_o);
 
 /**
    Read runMC.dat input file.
@@ -107,9 +117,16 @@ void readConfigFile(double **a, double **b, double **c, const int nsp, const int
    sideav: accumulated side average
    rhisto: density histogram
    chpotnb: every steps chemical potential will be executed
-   chpotit: chemical potential iterations (number of particles inserted for every specie)
+   chpotit: chemical potential iterations (number of particles inserted for
+   every specie)
  */
-void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc, double **rdmax, double *temp, double *deltaeng, unsigned long long int **ehisto, double *vdmax, char **scaling, double *pres, double *deltar, double **sideav, unsigned long long int **rhisto, const double eps_o, const double sigma_o, int *chpotnb, int *chpotit, double *final_sm_rate);
+void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc,
+                   double **rdmax, double *temp, double *deltaeng,
+                   unsigned long long int **ehisto, double *vdmax,
+                   char **scaling, double *pres, double *deltar,
+                   double **sideav, unsigned long long int **rhisto,
+                   const double eps_o, const double sigma_o, int *chpotnb,
+                   int *chpotit, double *final_sm_rate);
 
 /**
    Initialize output files
@@ -144,7 +161,13 @@ void initOutputFiles(const char *ensemble, const int nsp, char **atoms);
    eref: reference energy
 
  */
-void printout(const bool inst, double *etotal, double *eref, const double esr, const char *ensemble, double *sideav, const double etav, const int naver, const double v0, const double esav, const double volav, double *side, const int natoms, const int ntrial, const int naccept, const int nvaccept, const double sigma_o, const double eps_o, const double final_sm_rate, double *vdmax, double *rdmax);
+void printout(const bool inst, double *etotal, double *eref, const double esr,
+              const char *ensemble, double *sideav, const double etav,
+              const int naver, const double v0, const double esav,
+              const double volav, double *side, const int natoms,
+              const int ntrial, const int naccept, const int nvaccept,
+              const double sigma_o, const double eps_o,
+              const double final_sm_rate, double *vdmax, double *rdmax);
 
 /**
    Write configuration to conf.xyz output file
@@ -155,6 +178,7 @@ void printout(const bool inst, double *etotal, double *eref, const double esr, c
    r: particles positions (xyz)
    runit: normalization units of the simulation box's length sides
  */
-void writeConf(const int natoms, int *nspps, char **atoms, double *r, double *runit);
+void writeConf(const int natoms, int *nspps, char **atoms, double *r,
+               double *runit);
 
 #endif

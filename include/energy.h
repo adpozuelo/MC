@@ -1,6 +1,7 @@
 /*
  * TFM (URV/UOC): Computational Engineering and Mathematics.
- * Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic simulations.
+ * Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic
+ * simulations.
  *
  * Potential/Energy header file.
  *
@@ -26,7 +27,9 @@
    rcut: interaction cutoff radio
    rcut2: interaction cutoff radio power 2
 */
-void initPotential(double *kt, double *pres, const double temp, const char *units, double *rcut, double **rc, const int nsp, double *rcut2, const double eps_o);
+void initPotential(double *kt, double *pres, const double temp,
+                   const char *units, double *rcut, double **rc, const int nsp,
+                   double *rcut2, const double eps_o);
 
 /**
    Energy between two particles.
@@ -41,7 +44,8 @@ void initPotential(double *kt, double *pres, const double temp, const char *unit
    @return:
    the energy between two particles
 */
-double fpot(const double r2, const int nit, int *keyp, double *al, double *bl, double *cl, double *bl2);
+double fpot(const double r2, const int nit, int *keyp, double *al, double *bl,
+            double *cl, double *bl2);
 
 /**
    Energy of a configuration in serial mode.
@@ -61,26 +65,25 @@ double fpot(const double r2, const int nit, int *keyp, double *al, double *bl, d
    @return:
    the energy of a configuration
 */
-double energycpu(const int natoms, int **itp, double *r, double *runit, double *rc2, const int nsp, int *nspps, int *keyp, double *al, double *bl, double *cl, double *bl2);
+double energycpu(const int natoms, int **itp, double *r, double *runit,
+                 double *rc2, const int nsp, int *nspps, int *keyp, double *al,
+                 double *bl, double *cl, double *bl2);
 
 /**
    Chemical potental algorithm in serial mode.
    @arguments:
-   chpotit: chemical potential iterations (number of particles inserted for every specie)
-   natoms: total number of atoms/particles
-   itp: interaction potentials between species
-   r: particles positions (xyz)
-   runit: normalization units of the simulation box's length sides
-   rc2: cutoff radio Morse/LJ parameters power 2
-   nsp: number of species
-   nspps: accumulated number of species per specie
-   keyp: potential's key -> 1 = Morse, 2 = Lennard Jones
-   al: Morse/LJ parameters
-   bl: Morse/LJ parameters
-   cl: Morse/LJ parameters
-   bl2: Morse/LJ parameters
-   kt: Boltzmann constant
+   chpotit: chemical potential iterations (number of particles inserted for
+   every specie) natoms: total number of atoms/particles itp: interaction
+   potentials between species r: particles positions (xyz) runit: normalization
+   units of the simulation box's length sides rc2: cutoff radio Morse/LJ
+   parameters power 2 nsp: number of species nspps: accumulated number of
+   species per specie keyp: potential's key -> 1 = Morse, 2 = Lennard Jones al:
+   Morse/LJ parameters bl: Morse/LJ parameters cl: Morse/LJ parameters bl2:
+   Morse/LJ parameters kt: Boltzmann constant
 */
-void chpotentialcpu(const int chpotit, const int natoms, int **itp, double *r, double *runit, double *rc2, const int nsp, int *nspps, int *keyp, double *al, double *bl, double *cl, double *bl2, const double kt);
+void chpotentialcpu(const int chpotit, const int natoms, int **itp, double *r,
+                    double *runit, double *rc2, const int nsp, int *nspps,
+                    int *keyp, double *al, double *bl, double *cl, double *bl2,
+                    const double kt);
 
 #endif
