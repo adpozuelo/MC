@@ -203,7 +203,7 @@ int main(int argc, char *argv[]) {
 
 	// Print simulation's information
 	printf("\nSimulating %s ensemble in %s mode.\n", ensemble, runMode);
-	printf("No electrostatics.\nEnergy units (%s).\nDensity %lf (npart/A^3).\n", units, natoms / v0);
+	printf("No electrostatics.\nEnergy units (%s).\nDensity %lf (npart/A^3).\n", units, natoms / (v0 * sigma_o * sigma_o * sigma_o));
 	if (strcmp(ensemble, "nvt") == 0 && chpotnb != 0) {
 		printf("Chemical potential enabled.\n");
 	} else if (strcmp(ensemble, "nvt") == 0 && chpotnb == 0) {
