@@ -28,10 +28,10 @@ void histograms(const char *ensemble, double *etotal,
                 unsigned long long int *rhisto) {
   if (strcmp(ensemble, "nvt") == 0) {  // if ensemble is nvt
     *etotal = esr;
-    int nei = rint((*etotal - eref) / deltaeng) +
-              NDE;  // get histogram's bind for the energy
-    if (nei < 0 ||
-        nei > 2 * NDE) {  // check integrity bounds for the energy's bind
+    // get histogram's bind for the energy
+    int nei = rint((*etotal - eref) / deltaeng) + NDE;
+    // check integrity bounds for the energy's bind
+    if (nei < 0 || nei > 2 * NDE) {
       printf("Warning: E histogram out of bounds, increase NDE up to %d!\n",
              abs(nei - NDE));
       exit(1);

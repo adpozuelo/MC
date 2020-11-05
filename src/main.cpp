@@ -235,6 +235,7 @@ int main(int argc, char *argv[]) {
   printf("\nSimulating %s ensemble in %s mode.\n", ensemble, runMode);
   printf("No electrostatics.\nEnergy units (%s).\nDensity %lf (npart/A^3).\n",
          units, natoms / (v0 * sigma_o * sigma_o * sigma_o));
+  printf("Temperature %.2lf %s\n", temp, units);
   if (strcmp(ensemble, "nvt") == 0 && chpotnb != 0) {
     printf("Chemical potential enabled.\n");
   } else if (strcmp(ensemble, "nvt") == 0 && chpotnb == 0) {
@@ -301,9 +302,10 @@ int main(int argc, char *argv[]) {
           nitmax, cudadevice, &ntrial, &stream, rdmax, kt, &esr, &naccept,
           chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept);
     }
-    clock_t mAtomsEnd = clock();  // Move atoms control time end
-    moveAtomsTime += (double)(mAtomsEnd - mAtomsBegin) /
-                     CLOCKS_PER_SEC;  // Time for move atoms algorithm
+    // Move atoms control time end
+    clock_t mAtomsEnd = clock();
+    // Time for move atoms algorithm
+    moveAtomsTime += (double)(mAtomsEnd - mAtomsBegin) / CLOCKS_PER_SEC;
 
     if (strcmp(ensemble, "npt") == 0) {  // If simulation ensemble is npt
       clock_t mVolumeBegin = clock();    // Move volume time begin
@@ -369,10 +371,8 @@ int main(int argc, char *argv[]) {
     }
 
     // If configuration file output's write is enabled and it must be writed
-    // (only in serial mode!)
-    if (wc != 0 && istep % wc == 0 && strcmp(runMode, "serial") == 0) {
-      writeConf(natoms, nspps, atoms, r,
-                runit);  // Write configuration to conf.xyz output file
+    if (wc != 0 && istep % wc == 0) {
+      writeConf(natoms, nspps, atoms, r, runit);
     }
   }
 
@@ -400,6 +400,9 @@ int main(int argc, char *argv[]) {
   puts(
       "------------------------------------------------------------------------"
       "--------\n");
+
+  // Write final configuration to conf.xyz output file
+  if (wc == 0) writeConf(natoms, nspps, atoms, r, runit);
 
   clock_t end = clock();  // General time control end
   double time_spent =
