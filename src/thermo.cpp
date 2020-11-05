@@ -41,8 +41,8 @@ void histograms(const char *ensemble, double *etotal,
 
   } else if (strcmp(ensemble, "npt") == 0) {  // if ensemble is npt
     double rhoins = natoms / v0;
-    int nrho =
-        abs(rint(rhoins / deltar));  // get histomgram's bind for the density
+    // get histomgram's bind for the density
+    int nrho = abs(rint(rhoins / deltar));
 
     if (nrho > NRMAX) {  // check integrity bound for the density's bind
       printf("Warning: RHO histogram out of bounds, increase NRMAX up to %d!\n",
