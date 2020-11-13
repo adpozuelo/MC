@@ -5,9 +5,9 @@
  *
  * Move atoms and move volume header file.
  *
- * Author: adpozuelo@uoc.edu
- * Version: 1.0.
- * Date: 2018
+ * Author: adpozuelo@gmail.com
+ * Version: 1.1.
+ * Date: 11/2020
  */
 
 #ifndef MOVES_H_
@@ -27,6 +27,7 @@
    power 2 keyp: potential's key -> 1 = Morse, 2 = Lennard Jones al: Morse/LJ
    parameters bl: Morse/LJ parameters cl: Morse/LJ parameters bl2: Morse/LJ
    parameters kt: Boltzmann constant
+   esr_rc: interaction energy in cutoff radio
    @return:
    ntrial: number of trials executed
    esr: current iteration/step energy
@@ -36,7 +37,7 @@ void moveAtoms(int *ntrial, const int natoms, VSLStreamStatePtr *stream,
                double *rdmax, double *runit, double *r, const int nsp,
                int *nspps, int **itp, double *rc2, int *keyp, double *al,
                double *bl, double *cl, double *bl2, const double kt,
-               double *esr, int *naccept);
+               double *esr, int *naccept, double *esr_rc);
 
 /**
    Move volume algorithm in serial mode.
@@ -60,6 +61,7 @@ void moveAtoms(int *ntrial, const int natoms, VSLStreamStatePtr *stream,
    bl: Morse/LJ parameters
    cl: Morse/LJ parameters
    bl2: Morse/LJ parameters
+   esr_rc: interaction energy in cutoff radio
    @return:
    esr: current iteration/step energy
    v0: simulation box volume
@@ -70,6 +72,7 @@ void moveVolume(double *esr, double *v0, double *side, double *a, double *b,
                 const double vdmax, const char *scaling, const double pres,
                 const double kt, const int natoms, int *nvaccept, int **itp,
                 double *r, double *rc2, const int nsp, int *nspps, int *keyp,
-                double *al, double *bl, double *cl, double *bl2);
+                double *al, double *bl, double *cl, double *bl2,
+                double *esr_rc);
 
 #endif

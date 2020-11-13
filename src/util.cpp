@@ -5,9 +5,9 @@
  *
  * Utility functions code file.
  *
- * Author: adpozuelo@uoc.edu
- * Version: 1.0.
- * Date: 2018
+ * Author: adpozuelo@gmail.com
+ * Version: 1.1.
+ * Date: 11/2020
  */
 
 #include <math.h>

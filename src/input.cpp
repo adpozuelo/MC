@@ -5,9 +5,9 @@
  *
  * Input code file.
  *
- * Author: adpozuelo@uoc.edu
- * Version: 1.0.
- * Date: 2018
+ * Author: adpozuelo@gmail.com
+ * Version: 1.1.
+ * Date: 11/2020
  */
 
 #include <math.h>
@@ -73,9 +73,8 @@ void readSystemDatFile(char **initcf, int *nsp, int *nitmax, char ***atoms,
     printf("ERROR: '%s' not supported as input configuration!\n", *initcf);
     exit(1);
   }
-
-  *nitmax = (*nsp * *nsp + *nsp) /
-            2;  // calculate the max number of interactions between species
+  // calculate the max number of interactions between species
+  *nitmax = (*nsp * *nsp + *nsp) / 2;
   *nspps = (int *)malloc(*nsp * sizeof(int));
   *atoms = (char **)malloc(*nsp * sizeof(char *));
   if (*atoms == NULL || *nspps == NULL) {
@@ -453,7 +452,7 @@ void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc,
                    char **scaling, double *pres, double *deltar,
                    double **sideav, unsigned long long int **rhisto,
                    const double eps_o, const double sigma_o, int *chpotnb,
-                   int *chpotit, double *final_sm_rate) {
+                   int *chpotit, double *final_sm_rate, int *shift) {
   char line[MAX_LINE_SIZE] = "";
   char buffer[MAX_LINE_SIZE] = "";
   const char *filename = "../data/runMC.dat";  // input filename
@@ -495,7 +494,7 @@ void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc,
     readLine(runFile, filename, line);
     // read every steps chemical potential will be executed and chemical
     // potential iterations (number of particles inserted for every specie)
-    if (sscanf(line, "%d %d", chpotnb, chpotit) < 2) {
+    if (sscanf(line, "%d %d %d", chpotnb, chpotit, shift) < 3) {
       fputs(errorInvalidFormatRunFile, stderr);
       exit(1);
     }

@@ -5,9 +5,9 @@
  *
  * Input/Output header file.
  *
- * Author: adpozuelo@uoc.edu
- * Version: 1.0.
- * Date: 2018
+ * Author: adpozuelo@gmail.com
+ * Version: 1.1.
+ * Date: 11/2020
  */
 
 #ifndef IO_H
@@ -126,7 +126,7 @@ void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc,
                    char **scaling, double *pres, double *deltar,
                    double **sideav, unsigned long long int **rhisto,
                    const double eps_o, const double sigma_o, int *chpotnb,
-                   int *chpotit, double *final_sm_rate);
+                   int *chpotit, double *final_sm_rate, int *shift);
 
 /**
    Initialize output files

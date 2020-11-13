@@ -5,9 +5,9 @@
  *
  * Potential/Energy header file.
  *
- * Author: adpozuelo@uoc.edu
- * Version: 1.0.
- * Date: 2018
+ * Author: adpozuelo@gmail.com
+ * Version: 1.1.
+ * Date: 11/2020
  */
 
 #ifndef ENERGY_H
@@ -62,12 +62,13 @@ double fpot(const double r2, const int nit, int *keyp, double *al, double *bl,
    bl: Morse/LJ parameters
    cl: Morse/LJ parameters
    bl2: Morse/LJ parameters
+   esr_rc: interaction energy in cutoff radio
    @return:
    the energy of a configuration
 */
 double energycpu(const int natoms, int **itp, double *r, double *runit,
                  double *rc2, const int nsp, int *nspps, int *keyp, double *al,
-                 double *bl, double *cl, double *bl2);
+                 double *bl, double *cl, double *bl2, double *esr_rc);
 
 /**
    Chemical potental algorithm in serial mode.
@@ -80,10 +81,11 @@ double energycpu(const int natoms, int **itp, double *r, double *runit,
    species per specie keyp: potential's key -> 1 = Morse, 2 = Lennard Jones al:
    Morse/LJ parameters bl: Morse/LJ parameters cl: Morse/LJ parameters bl2:
    Morse/LJ parameters kt: Boltzmann constant
+   esr_rc: interaction energy in cutoff radio
 */
 void chpotentialcpu(const int chpotit, const int natoms, int **itp, double *r,
                     double *runit, double *rc2, const int nsp, int *nspps,
                     int *keyp, double *al, double *bl, double *cl, double *bl2,
-                    const double kt);
+                    const double kt, double *esr_rc);
 
 #endif

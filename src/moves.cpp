@@ -5,9 +5,9 @@
  *
  * Move atoms and move volume serial code file.
  *
- * Author: adpozuelo@uoc.edu
- * Version: 1.0.
- * Date: 2018
+ * Author: adpozuelo@gmail.com
+ * Version: 1.1.
+ * Date: 11/2020
  */
 
 #include <math.h>
@@ -24,7 +24,7 @@ void moveAtoms(int *ntrial, const int natoms, VSLStreamStatePtr *stream,
                double *rdmax, double *runit, double *r, const int nsp,
                int *nspps, int **itp, double *rc2, int *keyp, double *al,
                double *bl, double *cl, double *bl2, const double kt,
-               double *esr, int *naccept) {
+               double *esr, int *naccept, double *esr_rc) {
   int ntest, iti, itj, nit, h_size = NDIM + 1;
   double rd2, rdn2, deltae, eng0, eng1;
   double *harvest = (double *)malloc(h_size * sizeof(double));
@@ -77,13 +77,13 @@ void moveAtoms(int *ntrial, const int natoms, VSLStreamStatePtr *stream,
       if (rd2 < rc2[nit]) {  // if distance is less than interaction pontential
                              // cutoff radio
         eng0 += fpot(rd2, nit, keyp, al, bl, cl,
-                     bl2);  // get energy between particles
+                     bl2) - esr_rc[nit];  // get energy between particles
       }
 
       // before movement
       rdn2 = dist2(rddn, runit);
       if (rdn2 < rc2[nit]) {
-        eng1 += fpot(rdn2, nit, keyp, al, bl, cl, bl2);
+        eng1 += fpot(rdn2, nit, keyp, al, bl, cl, bl2) - esr_rc[nit];
       }
     }
 
@@ -126,7 +126,8 @@ void moveVolume(double *esr, double *v0, double *side, double *a, double *b,
                 const double vdmax, const char *scaling, const double pres,
                 const double kt, const int natoms, int *nvaccept, int **itp,
                 double *r, double *rc2, const int nsp, int *nspps, int *keyp,
-                double *al, double *bl, double *cl, double *bl2) {
+                double *al, double *bl, double *cl, double *bl2,
+                double *esr_rc) {
   double esrOld = *esr;
   double v0Old = *v0;
   double *sideOld = (double *)malloc(NDIM * sizeof(double));
@@ -180,8 +181,8 @@ void moveVolume(double *esr, double *v0, double *side, double *a, double *b,
   }
 
   // get energy after volume's movement
-  *esr =
-      energycpu(natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl, bl2);
+  *esr = energycpu(natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl,
+                   bl2, esr_rc);
 
   double deltaEsr = *esr - esrOld;  // get difference of energies (after and
                                     // before volume's movement)

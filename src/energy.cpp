@@ -5,9 +5,9 @@
  *
  * Potential/Energy serial code file.
  *
- * Author: adpozuelo@uoc.edu
- * Version: 1.0.
- * Date: 2018
+ * Author: adpozuelo@gmail.com
+ * Version: 1.1.
+ * Date: 11/2020
  */
 
 #include <math.h>
@@ -54,15 +54,14 @@ double fpot(const double r2, const int nit, int *keyp, double *al, double *bl,
             double *cl, double *bl2) {
   double rr, r6;
 
-  if (keyp[nit] ==
-      1) {  // Morse potential (https://en.wikipedia.org/wiki/Morse_potential)
+  // Morse potential (https://en.wikipedia.org/wiki/Morse_potential)
+  if (keyp[nit] == 1) {
     rr = sqrt(r2);
     double expp = exp(-bl[nit] * (rr - cl[nit]));
     return al[nit] * ((1 - expp) * (1 - expp) - 1);
 
-  } else if (keyp[nit] ==
-             2) {  // Lennard Jones potential
-                   // (https://en.wikipedia.org/wiki/Lennard-Jones_potential)
+    // LJ potential (https://en.wikipedia.org/wiki/Lennard-Jones_potential)
+  } else if (keyp[nit] == 2) {
     r6 = (bl2[nit] / r2) * (bl2[nit] / r2) * (bl2[nit] / r2);
     return 4 * al[nit] * r6 * (r6 - 1.0);
 
@@ -75,7 +74,7 @@ double fpot(const double r2, const int nit, int *keyp, double *al, double *bl,
 // Energy of a configuration in serial mode.
 double energycpu(const int natoms, int **itp, double *r, double *runit,
                  double *rc2, const int nsp, int *nspps, int *keyp, double *al,
-                 double *bl, double *cl, double *bl2) {
+                 double *bl, double *cl, double *bl2, double *esr_rc) {
   double rd2, eng = 0.0;
   int iti, itj, nit;
   double *rdd = (double *)malloc(NDIM * sizeof(double));
@@ -102,7 +101,7 @@ double energycpu(const int natoms, int **itp, double *r, double *runit,
       if (rd2 < rc2[nit]) {  // if distance is less than interaction pontetial
                              // cutoff radio
         eng += fpot(rd2, nit, keyp, al, bl, cl,
-                    bl2);  // accumulate energy between particles
+                    bl2) - esr_rc[nit];  // accumulate energy between particles
       }
     }
   }
@@ -115,7 +114,7 @@ double energycpu(const int natoms, int **itp, double *r, double *runit,
 void chpotentialcpu(const int chpotit, const int natoms, int **itp, double *r,
                     double *runit, double *rc2, const int nsp, int *nspps,
                     int *keyp, double *al, double *bl, double *cl, double *bl2,
-                    const double kt) {
+                    const double kt, double *esr_rc) {
   VSLStreamStatePtr stream;  // uniform random number generator stream
   // vslNewStream(&stream, VSL_BRNG_MT19937, time(NULL)); // random mode
   vslNewStream(&stream, VSL_BRNG_MT19937, 1);  // deterministic mode
@@ -168,7 +167,7 @@ void chpotentialcpu(const int chpotit, const int natoms, int **itp, double *r,
         if (rd2 < rc2[nit]) {  // if distance is less than interaction pontetial
                                // cutoff radio
           eng += fpot(rd2, nit, keyp, al, bl, cl,
-                      bl2);  // accumulate energy between particles
+                      bl2) - esr_rc[nit];  // accumulate energy between particles
         }
       }
       deltae[j] =

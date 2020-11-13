@@ -5,9 +5,9 @@
  *
  * GPU functions header file.
  *
- * Author: adpozuelo@uoc.edu
- * Version: 1.0.
- * Date: 2018
+ * Author: adpozuelo@gmail.com
+ * Version: 1.1.
+ * Date: 11/2020
  */
 
 #ifndef GPU_H
@@ -47,6 +47,7 @@
    rdmax: maximum trial displacements
    chpotit: chemical potential iterations (number of particles inserted for
    every specie) cudadevice: cuda device in which run the algorithm.
+   esr_rc: interaction energy in cutoff radio
    @return:
    mode 1:
       the energy of a configuration
@@ -69,6 +70,6 @@ extern "C" void gpu(const int mode, const int natoms, int **itp, double *r,
                     double *esr, int *naccept, const int chpotit, double *v0,
                     double *side, double *a, double *b, double *c,
                     const double vdmax, const char *scaling, const double pres,
-                    int *nvaccept);
+                    int *nvaccept, double *esr_rc);
 
 #endif

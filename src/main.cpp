@@ -26,9 +26,9 @@
  *                 "K" Lennard-Jones (Energy in Kelvin).
  *        Distance: Angstrom (internal units in box length).
  *
- * Author: adpozuelo@uoc.edu
- * Version: 1.0.
- * Date: 2018
+ * Author: adpozuelo@gmail.com
+ * Version: 1.1.
+ * Date: 11/2020
  */
 
 #include <stdbool.h>
@@ -112,11 +112,11 @@ int main(int argc, char *argv[]) {
      chpotnb: every steps chemical potential will be executed
      chpotit: chemical potential iterations (number of particles inserted for
      every specie)
+     shift: enable/disable shift mode
    */
   int nsp, nitmax, natoms, naccept, nvaccept, ntrial, naver, nstep, nequil, nb,
-      wc, chpotnb, chpotit;
-  natoms = naccept = nvaccept = ntrial = naver =
-      0;  // Accumulators initialized to zero
+      wc, chpotnb, chpotit, shift;
+  natoms = naccept = nvaccept = ntrial = naver = 0;
   /**
      nspps: accumulated number of species per specie
      keyp: potential's key -> 1 = Morse, 2 = Lennard Jones
@@ -220,7 +220,7 @@ int main(int argc, char *argv[]) {
   // Read runMC.dat input file
   readRunMCFile(&ensemble, &nstep, &nequil, &nb, &wc, &rdmax, &temp, &deltaeng,
                 &ehisto, &vdmax, &scaling, &pres, &deltar, &sideav, &rhisto,
-                eps_o, sigma_o, &chpotnb, &chpotit, &final_sm_rate);
+                eps_o, sigma_o, &chpotnb, &chpotit, &final_sm_rate, &shift);
 
   // Initialize output files
   initOutputFiles(ensemble, nsp, atoms);
@@ -230,6 +230,20 @@ int main(int argc, char *argv[]) {
 
   // Initialize simulation box potential
   initPotential(&kt, &pres, temp, units, &rcut, rc, nsp, &rcut2, eps_o);
+
+  // SHIFT MODE: esr_rc: interaction energy in cutoff radio
+  double *esr_rc = (double *)malloc(nitmax * sizeof(double));
+  if (esr_rc == NULL) {
+    fputs(errorNEM, stderr);
+    exit(1);
+  }
+  for (int i = 0; i < nitmax; ++i) {
+    if (shift == 1) {
+      esr_rc[i] = fpot(rc2[i], i, keyp, al, bl, cl, bl2);
+    } else {
+      esr_rc[i] = 0.0;
+    }
+  }
 
   // Print simulation's information
   printf("\nSimulating %s ensemble in %s mode.\n", ensemble, runMode);
@@ -241,22 +255,27 @@ int main(int argc, char *argv[]) {
   } else if (strcmp(ensemble, "nvt") == 0 && chpotnb == 0) {
     printf("Chemical potential not enabled.\n");
   }
+  if (shift == 1) {
+    printf("SHIFT enabled.\n");
+  } else {
+    printf("SHIFT not enabled.\n");
+  }
   putchar('\n');
 
   // Get initial energy of the configuration
   if (strcmp(runMode, "serial") == 0) {
     esr = energycpu(natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl,
-                    bl2);
+                    bl2, esr_rc);
   }
   if (strcmp(runMode, "gpu") == 0) {
     // Initialize GPU (mode 0)
     gpu(0, natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl, bl2,
         nitmax, cudadevice, &ntrial, &stream, rdmax, kt, &esr, &naccept,
-        chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept);
+        chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept, esr_rc);
     // Energy GPU (mode 1)
     gpu(1, natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl, bl2,
         nitmax, cudadevice, &ntrial, &stream, rdmax, kt, &esr, &naccept,
-        chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept);
+        chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept, esr_rc);
   }
 
   // Print initial energy of the configuration
@@ -294,13 +313,13 @@ int main(int argc, char *argv[]) {
     // Move atoms algorithm in selected run mode
     if (strcmp(runMode, "serial") == 0) {
       moveAtoms(&ntrial, natoms, &stream, rdmax, runit, r, nsp, nspps, itp, rc2,
-                keyp, al, bl, cl, bl2, kt, &esr, &naccept);
+                keyp, al, bl, cl, bl2, kt, &esr, &naccept, esr_rc);
     }
     if (strcmp(runMode, "gpu") == 0) {
       // MoveAtoms GPU (mode 2)
       gpu(2, natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl, bl2,
           nitmax, cudadevice, &ntrial, &stream, rdmax, kt, &esr, &naccept,
-          chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept);
+          chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept, esr_rc);
     }
     // Move atoms control time end
     clock_t mAtomsEnd = clock();
@@ -313,13 +332,13 @@ int main(int argc, char *argv[]) {
       if (strcmp(runMode, "serial") == 0) {
         moveVolume(&esr, &v0, side, a, b, c, runit, &stream, vdmax, scaling,
                    pres, kt, natoms, &nvaccept, itp, r, rc2, nsp, nspps, keyp,
-                   al, bl, cl, bl2);
+                   al, bl, cl, bl2, esr_rc);
       }
       if (strcmp(runMode, "gpu") == 0) {
         // MoveVolume GPU (mode 4)
         gpu(4, natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl, bl2,
             nitmax, cudadevice, &ntrial, &stream, rdmax, kt, &esr, &naccept,
-            chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept);
+            chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept, esr_rc);
       }
       clock_t mVolumeEnd = clock();  // Move volume control time end
       moveVolumeTime += (double)(mVolumeEnd - mVolumeBegin) /
@@ -338,14 +357,14 @@ int main(int argc, char *argv[]) {
           // Chemical potential algorithm in selected run mode
           if (strcmp(runMode, "serial") == 0) {
             chpotentialcpu(chpotit, natoms, itp, r, runit, rc2, nsp, nspps,
-                           keyp, al, bl, cl, bl2, kt);
+                           keyp, al, bl, cl, bl2, kt, esr_rc);
           }
           if (strcmp(runMode, "gpu") == 0) {
             // Chemical Potential GPU (mode 3)
             gpu(3, natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl,
                 bl2, nitmax, cudadevice, &ntrial, &stream, rdmax, kt, &esr,
                 &naccept, chpotit, &v0, side, a, b, c, vdmax, scaling, pres,
-                &nvaccept);
+                &nvaccept, esr_rc);
           }
           clock_t chPotentialEnd = clock();  // Chemical potential time end
           chPotentialTime +=
@@ -379,17 +398,17 @@ int main(int argc, char *argv[]) {
   // Get final energy of the configuration
   if (strcmp(runMode, "serial") == 0) {
     esr = energycpu(natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl,
-                    bl2);
+                    bl2, esr_rc);
   }
   if (strcmp(runMode, "gpu") == 0) {
     // Energy GPU (mode 1)
     gpu(1, natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl, bl2,
         nitmax, cudadevice, &ntrial, &stream, rdmax, kt, &esr, &naccept,
-        chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept);
+        chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept, esr_rc);
     // Release GPU (mode 5)
     gpu(5, natoms, itp, r, runit, rc2, nsp, nspps, keyp, al, bl, cl, bl2,
         nitmax, cudadevice, &ntrial, &stream, rdmax, kt, &esr, &naccept,
-        chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept);
+        chpotit, &v0, side, a, b, c, vdmax, scaling, pres, &nvaccept, esr_rc);
   }
 
   // Print final energy of the configuration
@@ -428,6 +447,7 @@ int main(int argc, char *argv[]) {
   free(keyp);
   free(units);
   free(runMode);
+  free(esr_rc);
   free(cl);
   free(bl2);
   free(al);
