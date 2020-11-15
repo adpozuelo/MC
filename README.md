@@ -1,8 +1,10 @@
-Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic simulations (stable version 1.2).
+Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic simulations.
 ===========
 
 <p> Developer:
 	Antonio Díaz Pozuelo (adpozuelo@gmail.com) </p>
+
+<p> Stable version: 1.2 </p>
 
 <p> MC is my URV's (Universitat Rovira i Virgili) / UOC's (Universitat Oberta de Catalunya) final master project (TFM). </p>
 
