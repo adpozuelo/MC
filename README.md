@@ -1,4 +1,4 @@
-Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic simulations.
+Serial and parallel (CUDA) general purpose Monte Carlo code for atomistic simulations (stable version 1.2).
 ===========
 
 <p> Developer:

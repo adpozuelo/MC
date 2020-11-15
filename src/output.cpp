@@ -6,7 +6,7 @@
  * Output code file.
  *
  * Author: adpozuelo@gmail.com
- * Version: 1.1.
+ * Version: 1.2.
  * Date: 11/2020
  */
 
@@ -19,14 +19,15 @@
 // Print average and/or instant results and write them to output files
 void printout(const bool inst, double *etotal, double *eref, const double esr,
               const char *ensemble, double *sideav, const double etav,
-              const int naver, const double v0, const double esav,
+              const unsigned long int naver, const double v0, const double esav,
               const double volav, double *side, const int natoms,
-              const int ntrial, const int naccept, const int nvaccept,
-              const double sigma_o, const double eps_o,
-              const double final_sm_rate, double *vdmax, double *rdmax) {
+              const unsigned long int ntrial, const unsigned long int naccept,
+              const unsigned long int nvaccept, const double sigma_o,
+              const double eps_o, const double final_sm_rate, double *vdmax,
+              double *rdmax) {
   static double etavq = 0.0;      // total energy average
   static int npeq = 0;            // number of printouts
-  int ncycles = ntrial / natoms;  // number of cycles
+  unsigned long int ncycles = ntrial / natoms;  // number of cycles
   double n_accept_trial = naccept / (double)ntrial;
   double nv_accept_ncycles = nvaccept / (double)ncycles;
   double nacceptper = 100 * n_accept_trial;  // % of accepted atom's movements
@@ -44,7 +45,7 @@ void printout(const bool inst, double *etotal, double *eref, const double esr,
 
     if (strcmp(ensemble, "nvt") == 0) {  // if ensemble is nvt write information
                                          // (not normalized!) to the output file
-      if (fprintf(ioth, "     %2d    %.4lf        %.3lf       %.3lf\n", ncycles,
+      if (fprintf(ioth, "     %2lu    %.4lf        %.3lf       %.3lf\n", ncycles,
                   nacceptper, etav * eps_o / naver,
                   esav * eps_o / naver) == EOF) {
         printf("ERROR: cannot write to '%s' file!\n", filenameTh);
@@ -54,7 +55,7 @@ void printout(const bool inst, double *etotal, double *eref, const double esr,
                0) {  // if ensemble is npt write information (not normalized!)
                      // to the output file
       if (fprintf(ioth,
-                  "     %2d    %.4lf    %.4lf    %.3lf       %.3lf      %.2lf",
+                  "     %2lu    %.4lf    %.4lf    %.3lf       %.3lf      %.2lf",
                   ncycles, nacceptper, nvacceptper, etav * eps_o / naver,
                   esav * eps_o / naver,
                   volav * sigma_o * sigma_o * sigma_o / naver) == EOF) {
@@ -101,20 +102,20 @@ void printout(const bool inst, double *etotal, double *eref, const double esr,
 
   if (strcmp(ensemble, "nvt") == 0) {  // if ensemble is nvt write information
                                        // (not normalized!) to the output file
-    if (fprintf(iothi, "     %2d    %.4lf        %.3lf       %.3lf\n", ncycles,
+    if (fprintf(iothi, "     %2lu    %.4lf        %.3lf       %.3lf\n", ncycles,
                 nacceptper, *etotal * eps_o, esr * eps_o) == EOF) {
       printf("ERROR: cannot write to '%s' file!\n", filenameThi);
       exit(1);
     }
     // and print information (not normalized!)
-    printf("     %2d    %.4lf        %.3lf       %.3lf\n", ncycles, nacceptper,
+    printf("     %2lu    %.4lf        %.3lf       %.3lf\n", ncycles, nacceptper,
            *etotal * eps_o, esr * eps_o);
   } else if (strcmp(ensemble, "npt") ==
              0) {  // if ensemble is npt write information (not normalized!) to
                    // the output file
     if (fprintf(
             iothi,
-            "     %2d    %.4lf        %.4lf         %.3lf      %.3lf     %.2lf",
+            "     %2lu    %.4lf        %.4lf         %.3lf      %.3lf     %.2lf",
             ncycles, nacceptper, nvacceptper, *etotal * eps_o, esr * eps_o,
             v0 * sigma_o * sigma_o * sigma_o) == EOF) {
       printf("ERROR: cannot write to '%s' file!\n", filenameThi);
@@ -134,7 +135,7 @@ void printout(const bool inst, double *etotal, double *eref, const double esr,
       exit(1);
     }
     // and print information (not normalized!)
-    printf("     %2d     %.4lf      %.4lf   %.3lf     %.3lf   %.2lf\n", ncycles,
+    printf("     %2lu     %.4lf      %.4lf   %.3lf     %.3lf   %.2lf\n", ncycles,
            nacceptper, nvacceptper, *etotal * eps_o, esr * eps_o, v0 * sigma_o);
   }
 

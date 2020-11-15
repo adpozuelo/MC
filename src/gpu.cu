@@ -6,7 +6,7 @@
  * GPU functions code file
  *
  * Author: adpozuelo@gmail.com
- * Version: 1.1.
+ * Version: 1.2.
  * Date: 11/2020
  */
 
@@ -343,12 +343,12 @@ __global__ void eKernel(float *r, float *eng, int natoms, int nsp, int *itp,
 extern "C" void gpu(const int mode, const int natoms, int **itp, double *r,
                     double *runit, double *rc2, const int nsp, int *nspps,
                     int *keyp, double *al, double *bl, double *cl, double *bl2,
-                    const int nitmax, const int cudadevice, int *ntrial,
+                    const int nitmax, const int cudadevice, unsigned long int *ntrial,
                     VSLStreamStatePtr *stream, double *rdmax, const double kt,
-                    double *esr, int *naccept, const int chpotit, double *v0,
+                    double *esr, unsigned long int *naccept, const int chpotit, double *v0,
                     double *side, double *a, double *b, double *c,
                     const double vdmax, const char *scaling, const double pres,
-                    int *nvaccept, double *esr_rc) {
+                    unsigned long int *nvaccept, double *esr_rc) {
   // data in GPU memory has to be static!
   static int *itpdev, *nsppsdev, *keypdev;
   static float *rdev, *runitdev, *rc2dev, *aldev, *bldev, *bl2dev, *cldev, *esr_rc_dev;

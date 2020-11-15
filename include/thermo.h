@@ -6,7 +6,7 @@
  * Statistics header file.
  *
  * Author: adpozuelo@gmail.com
- * Version: 1.1.
+ * Version: 1.2.
  * Date: 11/2020
  */
 
@@ -66,9 +66,10 @@ void histograms(const char *ensemble, double *etotal,
 void averages(bool *first, const char *ensemble, unsigned long long int *ehisto,
               const double deltaeng, double *eref, double *volav,
               const double v0, const double esr, double *sideav, double *side,
-              unsigned long long int *rhisto, const double deltar, int *naver,
-              double *etotal, double *etav, double *esav, const int natoms,
-              const int ntrial, const int naccept, const int nvaccept,
+              unsigned long long int *rhisto, const double deltar,
+              unsigned long int *naver, double *etotal, double *etav,
+              double *esav, const int natoms, const unsigned long int ntrial,
+              const unsigned long int naccept, const unsigned long int nvaccept,
               const double sigma_o, const double eps_o,
               const double final_sm_rate, double *vdmax, double *rdmax);
 

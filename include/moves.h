@@ -6,7 +6,7 @@
  * Move atoms and move volume header file.
  *
  * Author: adpozuelo@gmail.com
- * Version: 1.1.
+ * Version: 1.2.
  * Date: 11/2020
  */
 
@@ -33,11 +33,11 @@
    esr: current iteration/step energy
    naccept: number of success movements of particles in move atoms algorithm
 */
-void moveAtoms(int *ntrial, const int natoms, VSLStreamStatePtr *stream,
+void moveAtoms(unsigned long int *ntrial, const int natoms, VSLStreamStatePtr *stream,
                double *rdmax, double *runit, double *r, const int nsp,
                int *nspps, int **itp, double *rc2, int *keyp, double *al,
                double *bl, double *cl, double *bl2, const double kt,
-               double *esr, int *naccept, double *esr_rc);
+               double *esr, unsigned long int *naccept, double *esr_rc);
 
 /**
    Move volume algorithm in serial mode.
@@ -70,9 +70,9 @@ void moveAtoms(int *ntrial, const int natoms, VSLStreamStatePtr *stream,
 void moveVolume(double *esr, double *v0, double *side, double *a, double *b,
                 double *c, double *runit, VSLStreamStatePtr *stream,
                 const double vdmax, const char *scaling, const double pres,
-                const double kt, const int natoms, int *nvaccept, int **itp,
-                double *r, double *rc2, const int nsp, int *nspps, int *keyp,
-                double *al, double *bl, double *cl, double *bl2,
+                const double kt, const int natoms, unsigned long int *nvaccept,
+                int **itp, double *r, double *rc2, const int nsp, int *nspps,
+                int *keyp, double *al, double *bl, double *cl, double *bl2,
                 double *esr_rc);
 
 #endif

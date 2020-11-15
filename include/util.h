@@ -6,7 +6,7 @@
  * Utility functions header file.
  *
  * Author: adpozuelo@gmail.com
- * Version: 1.1.
+ * Version: 1.2.
  * Date: 11/2020
  */
 

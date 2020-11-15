@@ -6,7 +6,7 @@
  * Input/Output header file.
  *
  * Author: adpozuelo@gmail.com
- * Version: 1.1.
+ * Version: 1.2.
  * Date: 11/2020
  */
 
@@ -163,11 +163,12 @@ void initOutputFiles(const char *ensemble, const int nsp, char **atoms);
  */
 void printout(const bool inst, double *etotal, double *eref, const double esr,
               const char *ensemble, double *sideav, const double etav,
-              const int naver, const double v0, const double esav,
+              const unsigned long int naver, const double v0, const double esav,
               const double volav, double *side, const int natoms,
-              const int ntrial, const int naccept, const int nvaccept,
-              const double sigma_o, const double eps_o,
-              const double final_sm_rate, double *vdmax, double *rdmax);
+              const unsigned long int ntrial, const unsigned long int naccept,
+              const unsigned long int nvaccept, const double sigma_o,
+              const double eps_o, const double final_sm_rate, double *vdmax,
+              double *rdmax);
 
 /**
    Write configuration to conf.xyz output file

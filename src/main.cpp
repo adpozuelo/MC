@@ -27,7 +27,7 @@
  *        Distance: Angstrom (internal units in box length).
  *
  * Author: adpozuelo@gmail.com
- * Version: 1.1.
+ * Version: 1.2.
  * Date: 11/2020
  */
 
@@ -114,9 +114,9 @@ int main(int argc, char *argv[]) {
      every specie)
      shift: enable/disable shift mode
    */
-  int nsp, nitmax, natoms, naccept, nvaccept, ntrial, naver, nstep, nequil, nb,
-      wc, chpotnb, chpotit, shift;
-  natoms = naccept = nvaccept = ntrial = naver = 0;
+  int nsp, nitmax, natoms, nstep, nequil, nb, wc, chpotnb, chpotit, shift;
+  unsigned long int naccept, nvaccept, ntrial, naver;
+  natoms = naccept = nvaccept = ntrial = naver = shift = 0;
   /**
      nspps: accumulated number of species per specie
      keyp: potential's key -> 1 = Morse, 2 = Lennard Jones

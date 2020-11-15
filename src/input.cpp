@@ -6,7 +6,7 @@
  * Input code file.
  *
  * Author: adpozuelo@gmail.com
- * Version: 1.1.
+ * Version: 1.2.
  * Date: 11/2020
  */
 
@@ -485,7 +485,7 @@ void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc,
   // read number of total simulation's steps, number of equilibrium phase steps,
   // every steps averages will be executed and every steps configuration file
   // will be writed variables
-  if (sscanf(line, "%d %d %d %d", nstep, nequil, nb, wc) < 4) {
+  if (sscanf(line, "%d %d %d %d %d", nstep, nequil, nb, wc, shift) < 5) {
     fputs(errorInvalidFormatRunFile, stderr);
     exit(1);
   }
@@ -494,7 +494,7 @@ void readRunMCFile(char **ensemble, int *nstep, int *nequil, int *nb, int *wc,
     readLine(runFile, filename, line);
     // read every steps chemical potential will be executed and chemical
     // potential iterations (number of particles inserted for every specie)
-    if (sscanf(line, "%d %d %d", chpotnb, chpotit, shift) < 3) {
+    if (sscanf(line, "%d %d", chpotnb, chpotit) < 2) {
       fputs(errorInvalidFormatRunFile, stderr);
       exit(1);
     }

@@ -6,7 +6,7 @@
  * GPU functions header file.
  *
  * Author: adpozuelo@gmail.com
- * Version: 1.1.
+ * Version: 1.2.
  * Date: 11/2020
  */
 
@@ -65,11 +65,12 @@
 extern "C" void gpu(const int mode, const int natoms, int **itp, double *r,
                     double *runit, double *rc2, const int nsp, int *nspps,
                     int *keyp, double *al, double *bl, double *cl, double *bl2,
-                    const int nitmax, const int cudadevice, int *ntrial,
-                    VSLStreamStatePtr *stream, double *rdmax, const double kt,
-                    double *esr, int *naccept, const int chpotit, double *v0,
+                    const int nitmax, const int cudadevice,
+                    unsigned long int *ntrial, VSLStreamStatePtr *stream,
+                    double *rdmax, const double kt, double *esr,
+                    unsigned long int *naccept, const int chpotit, double *v0,
                     double *side, double *a, double *b, double *c,
                     const double vdmax, const char *scaling, const double pres,
-                    int *nvaccept, double *esr_rc);
+                    unsigned long int *nvaccept, double *esr_rc);
 
 #endif
